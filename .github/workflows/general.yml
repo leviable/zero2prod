@@ -1,4 +1,4 @@
-name: Rust
+name: Zero2Production
 
 on: [push, pull_request]
 

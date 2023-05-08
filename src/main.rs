@@ -10,4 +10,5 @@ fn test_foo() {
 fn main() {
     println!("Hello, world!");
     println!("testing");
+    println!("{}", foo());
 }
