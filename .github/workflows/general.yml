@@ -8,17 +8,22 @@ on:
   # this specific branch (a.k.a. book chapter).
   push:
     branches:
+      - add-sccache-and-actions
       - root-chapter-03-part1
       - chapter-3
   pull_request:
     types: [ opened, synchronize, reopened ]
     branches:
       - root-chapter-03-part1
+      - add-sccache-and-actions
 
 env:
   CARGO_TERM_COLOR: always
   SQLX_VERSION: 0.6.2
   SQLX_FEATURES: "rustls,postgres"
+  SCCACHE_GHA_ENABLED: "true"
+  RUSTC_WRAPPER: "sccache"
+  DATABASE_URL: "postgres://postgres:password@127.0.0.1:5432/newsletter"
 
 # A workflow run is made up of one or more jobs, which run in parallel by default
 # Each job runs in a runner environment specified by runs-on
@@ -45,6 +50,8 @@ jobs:
         ports:
           - 5432:5432
     steps:
+      - name: Run sccache-cache
+        uses: mozilla-actions/sccache-action@v0.0.3
       # Downloads a copy of the code in your repository before running CI tests
       - name: Check out repository code
         # The uses keyword specifies that this step will run v3 of the actions/checkout action. 
@@ -83,6 +90,8 @@ jobs:
     name: Rustfmt
     runs-on: ubuntu-latest
     steps:
+      - name: Run sccache-cache
+        uses: mozilla-actions/sccache-action@v0.0.3
       - uses: actions/checkout@v3
       - uses: dtolnay/rust-toolchain@stable
         with:
@@ -105,6 +114,8 @@ jobs:
         ports:
           - 5432:5432
     steps:
+      - name: Run sccache-cache
+        uses: mozilla-actions/sccache-action@v0.0.3
       - uses: actions/checkout@v3
       - uses: dtolnay/rust-toolchain@stable
         with:
@@ -135,6 +146,8 @@ jobs:
         ports:
           - 5432:5432
     steps:
+      - name: Run sccache-cache
+        uses: mozilla-actions/sccache-action@v0.0.3
       - name: Checkout repository
         uses: actions/checkout@v3
       - uses: dtolnay/rust-toolchain@stable
