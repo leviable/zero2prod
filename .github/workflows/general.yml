@@ -109,10 +109,8 @@ jobs:
         run: cargo install sqlx-cli --version=${{ env.SQLX_VERSION }} --features ${{ env.SQLX_FEATURES }} --no-default-features --locked
       - name: Install postgresql-client
         run: apt-get update && apt-get install postgresql-client -y
-      - name: Install sqlx-cli
-        run: cargo install sqlx-cli --version=${{ env.SQLX_VERSION }} --features ${{ env.SQLX_FEATURES }} --no-default-features --locked
       - name: Migrate database
-        run: SKIP_DOCKER=true ./scripts/init_db.sh
+        run: ./scripts/init_db.sh
       - name: Generate code coverage
         run: |
           cargo tarpaulin --verbose --workspace
