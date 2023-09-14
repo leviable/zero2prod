@@ -22,7 +22,9 @@ DB_PORT="${POSTGRES_PORT:=5432}"
 DB_HOST="${POSTGRES_HOST:=localhost}"
 
 if [[ -z "${SKIP_DOCKER}" ]]; then
+	echo "*******************************************************"
 	docker run \
+		--rm \
 		--name postgres \
 		-e POSTGRES_USER=${DB_USER} \
 		-e POSTGRES_PASSWORD=${DB_PASSWORD} \
