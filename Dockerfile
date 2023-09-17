@@ -4,9 +4,9 @@ RUN apt update && apt install lld clang -y
 
 WORKDIR /app/zero2prod
 
-COPY Cargo.* .
-
-RUN cargo vendor
+# COPY Cargo.* .
+#
+# RUN cargo vendor
 
 COPY . .
 
