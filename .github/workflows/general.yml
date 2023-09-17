@@ -116,3 +116,24 @@ jobs:
         run: SKIP_DOCKER=true ./scripts/init_db.sh
       - name: Generate code coverage
         run: cargo tarpaulin --verbose --workspace
+
+  docker:
+    name: Docker
+    runs-on: ubuntu-latest
+    services:
+      # postgres:
+      #   image: postgres:14
+      #   env:
+      #     POSTGRES_USER: postgres
+      #     POSTGRES_PASSWORD: password
+      #     POSTGRES_DB: postgres
+      #   ports:
+      #     - 5432:5432
+    # env:
+    #   DATABASE_URL: postgres://postgres:password@127.0.0.1:5432/newsletter
+    steps:
+      - uses: actions/checkout@v3
+      - uses: dtolnay/rust-toolchain@stable
+      - name: Docker Build
+        run: |
+          docker build -t zero2prod:latest .
