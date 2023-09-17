@@ -120,20 +120,17 @@ jobs:
   docker:
     name: Docker
     runs-on: ubuntu-latest
-    # services:
-      # postgres:
-      #   image: postgres:14
-      #   env:
-      #     POSTGRES_USER: postgres
-      #     POSTGRES_PASSWORD: password
-      #     POSTGRES_DB: postgres
-      #   ports:
-      #     - 5432:5432
-    # env:
-    #   DATABASE_URL: postgres://postgres:password@127.0.0.1:5432/newsletter
     steps:
       - uses: actions/checkout@v3
       - uses: dtolnay/rust-toolchain@stable
       - name: Docker Build
         run: |
           docker build -t zero2prod:latest .
+      - name: GHCR Login
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GHCR_PAT_2 }}
+      - name: Push
+        run: make push

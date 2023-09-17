@@ -1,20 +1,25 @@
-FROM rust:1.67.0  AS  builder
+FROM rust:1.68.0 AS builder
 
 RUN apt update && apt install lld clang -y
 
 WORKDIR /app/zero2prod
 
-# COPY Cargo.* .
-#
-# RUN cargo vendor
+# Prebuild dependencies and cache layer
+RUN cargo init --vcs none --lib
+RUN echo "fn main() {}" > src/main.rs
 
+COPY Cargo.toml .
+
+RUN cargo build 
+RUN cargo build --release
+
+# Copy in actual code and build binary
 COPY . .
 
 ENV SQLX_OFFLINE true
-
 RUN cargo build --release
 
-FROM debian:bullseye-slim AS runtime
+FROM debian:bullseye-slim AS app
 
 WORKDIR /app
 
