@@ -132,6 +132,6 @@ jobs:
         run: make pull-latest
       - name: Docker Build
         run: |
-          docker build -t zero2prod:latest .
+          make build
       - name: Push
         run: make push
