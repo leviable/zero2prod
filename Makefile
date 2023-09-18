@@ -46,47 +46,39 @@ _builder:
 	docker build \
 		--build-arg REPO=$(REPO) \
 		--build-arg REVISION=$(REVISION) \
-		--cache-from $(IMAGE_LOCAL) \
-		--cache-from $(IMAGE_BUILDER_LOCAL) \
+		--cache-from $(IMAGE) \
+		--cache-from $(IMAGE_BUILDER) \
 		--cache-from $(IMAGE_LATEST) \
 		--cache-from $(IMAGE_BUILDER_LATEST) \
 		--target builder \
 		-t $(IMAGE_BUILDER) \
 		-f ./Dockerfile .
 
-
-# Okay, lets work this out
-# I build it as local , creating a `local` and a `builder-local`
-# I need to 
-
 .PHONY: build
 build: _builder _app
-
 
 .PHONY: push
 push:
 	docker push $(IMAGE)
-	docker push $(IMAGE_BUILDER)
 
 .PHONY: pull
 pull:
 	docker pull $(IMAGE)
-	docker pull $(IMAGE_BUILDER)
 
 .PHONY: tag-latest
 tag-latest:
 	docker tag $(IMAGE) $(IMAGE_LATEST)
-	docker tag $(IMAGE_BUILDER) $(IMAGE_BUILDER_LATEST)
+	docker tag $(IMAGE_BUILDER) $(IMAGE_BUILDER_LATEST) || true
 
 .PHONY: push-latest
 push-latest:
 	docker push $(IMAGE_LATEST)
-	docker push $(IMAGE_BUILDER_LATEST)
+	docker push $(IMAGE_BUILDER_LATEST) || true
 
 .PHONY: pull-latest
 pull-latest:
 	docker pull $(IMAGE_LATEST)
-	docker pull $(IMAGE_BUILDER_LATEST)
+	docker pull $(IMAGE_BUILDER_LATEST) || true
 
 .PHONY: docker-login
 docker-login:
